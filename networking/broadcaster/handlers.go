@@ -1,4 +1,4 @@
-package networking
+package broadcaster
 
 import (
 	"encoding/json"
@@ -6,6 +6,8 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	lm "latticesphere/networking/messages"
 )
 
 func (b *Broadcaster) WSProxy(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +16,7 @@ func (b *Broadcaster) WSProxy(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	msg := NewMessage(string(reqBody), 1, b.SubscriberIDs())
+	msg := lm.NewMessage(string(reqBody), 1, b.SubscriberIDs())
 	// for _, id := range b.SubscriberIDs() {
 	//	fmt.Println("rid: ", id)
 	//	msg.AddRecipient(id)

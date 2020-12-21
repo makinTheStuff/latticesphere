@@ -1,4 +1,4 @@
-module ws_test
+module latticesphere
 
 go 1.14
 

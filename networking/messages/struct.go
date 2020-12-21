@@ -1,52 +1,53 @@
-package networking
+package messages
 
 import (
+	ln "latticesphere/networking"
 	"sync"
 )
 
 type Message struct {
 	// innclude header ?
-	id         ID
+	id         ln.ID
 	err        error
 	content    string
-	senderID   ID
-	recipients map[ID]Status
+	senderID   ln.ID
+	recipients map[ln.ID]Status
 
 	// sendAt int, createdAt, sentAt
 	sync.RWMutex
 }
 
-func NewMessage(content string, sid ID, rids []ID) *Message {
+func NewMessage(content string, sid ln.ID, rids []ln.ID) *Message {
 	m := Message{
 		content:    content,
 		senderID:   sid,
-		recipients: make(map[ID]Status),
+		recipients: make(map[ln.ID]Status),
 	}
 	m.AddRecipients(rids)
 	return &m
 }
 
 type MsgCoordinate struct {
-	messsageID  ID
-	recipientID ID
+	MesssageID  ln.ID
+	RecipientID ln.ID
 }
 
-func NewMsgCoordinate(mID, rID ID) MsgCoordinate {
+func NewMsgCoordinate(mID, rID ln.ID) MsgCoordinate {
 	return MsgCoordinate{
-		messsageID:  mID,
-		recipientID: rID,
+		MesssageID:  mID,
+		RecipientID: rID,
 	}
 }
 
 type Status struct {
 	// type and status consts defined in consts.go
-	status MessageStatus
+	status ln.MessageStatus
 	err    error
 
 	sync.RWMutex
 }
 
-func (s *Status) updateStatus(status MessageStatus, err error) {
+func (s *Status) updateStatus(status ln.MessageStatus, err error) {
 	s.Lock()
 	defer s.Unlock()
 	s.status = status

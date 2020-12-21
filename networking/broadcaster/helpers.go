@@ -1,7 +1,9 @@
-package networking
+package broadcaster
 
 import (
 	"strconv"
+
+	ln "latticesphere/networking"
 )
 
 func (b *Broadcaster) SubCountInt() int {
@@ -25,10 +27,10 @@ func (b *Broadcaster) IsRunning() bool {
 	return b.running
 }
 
-func (b *Broadcaster) SubscriberIDs() []ID {
+func (b *Broadcaster) SubscriberIDs() []ln.ID {
 	b.RLock()
 	defer b.RUnlock()
-	ids := make([]ID, len(b.subscribers))
+	ids := make([]ln.ID, len(b.subscribers))
 	index := 0
 	for id, _ := range b.subscribers {
 		ids[index] = id

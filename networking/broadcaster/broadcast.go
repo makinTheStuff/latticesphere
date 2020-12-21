@@ -1,9 +1,13 @@
-package networking
+package broadcaster
 
 import (
 	"fmt"
 	"log"
 	"net"
+
+	ln "latticesphere/networking"
+	lm "latticesphere/networking/messages"
+	ls "latticesphere/networking/subscriber"
 )
 
 func (b *Broadcaster) start() {
@@ -28,7 +32,7 @@ func (b *Broadcaster) AddSub(c net.Conn) {
 	b.Lock()
 	if b.subscribers == nil {
 		fmt.Println("\tno subs found; making new map")
-		b.subscribers = make(map[ID]*Subscriber)
+		b.subscribers = make(map[ln.ID]*ls.Subscriber)
 	}
 	b.Unlock()
 
@@ -37,7 +41,7 @@ func (b *Broadcaster) AddSub(c net.Conn) {
 
 	b.Lock()
 	b.lastID += 1
-	sub := NewSubscriber(b.lastID, c, 2, &b.messages)
+	sub := ls.NewSubscriber(b.lastID, c, 2, &b.messages)
 	b.subscribers[sub.ID()] = sub
 	b.Unlock()
 
@@ -46,7 +50,7 @@ func (b *Broadcaster) AddSub(c net.Conn) {
 	fmt.Println("Broadcaster.AddSub -- end\n")
 }
 
-func (b *Broadcaster) Remove(sid ID) {
+func (b *Broadcaster) Remove(sid ln.ID) {
 	fmt.Println("\tbefore: ", b.SubscriberIDs())
 	b.Lock()
 	delete(b.subscribers, sid)
@@ -54,7 +58,7 @@ func (b *Broadcaster) Remove(sid ID) {
 	fmt.Println("\t after: ", b.SubscriberIDs(), "\n\n")
 }
 
-func (b *Broadcaster) QueueMessage(msg *Message) {
+func (b *Broadcaster) QueueMessage(msg *lm.Message) {
 	b.messages.AddMessage(msg)
 }
 

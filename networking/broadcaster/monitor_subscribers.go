@@ -1,4 +1,4 @@
-package networking
+package broadcaster
 
 import (
 	"fmt"
@@ -11,16 +11,15 @@ func (b *Broadcaster) Monitor() {
 }
 
 func (b *Broadcaster) drainMessages() {
-	for mc := range b.messages.mqueue {
+	for mc := range b.messages.MQueue {
 		b.RLock()
-		sub, found := b.subscribers[mc.recipientID]
+		sub, found := b.subscribers[mc.RecipientID]
+		b.RUnlock()
 		if found {
 			fmt.Println("drainmessages ------ ", mc, b.SubscriberIDs())
 			fmt.Println("-----------------", sub.ID(), found)
-			sub.outgoing <- mc
+			sub.Send(mc)
 		}
-		b.RUnlock()
-		//}
 	}
 }
 

@@ -1,9 +1,12 @@
-package networking
+package subscriber
 
 import (
 	"fmt"
 	"github.com/gobwas/ws"
 	"time"
+
+	ln "latticesphere/networking"
+	lm "latticesphere/networking/messages"
 )
 
 func (sub *Subscriber) Start() {
@@ -16,7 +19,7 @@ func (sub *Subscriber) HasExpired() bool {
 	return sub.expired
 }
 
-func (sub *Subscriber) ID() ID {
+func (sub *Subscriber) ID() ln.ID {
 	sub.RLock()
 	defer sub.RUnlock()
 	return sub.id
@@ -41,7 +44,7 @@ func (sub *Subscriber) GetRemoteAddr() string {
 	return sub.conn.RemoteAddr().String()
 }
 
-func (sub *Subscriber) Send(msg MsgCoordinate) bool {
+func (sub *Subscriber) Send(msg lm.MsgCoordinate) bool {
 	fmt.Println("Subscriber.Send", sub.ID(), sub.expired, msg)
 	sub.Lock()
 	defer sub.Unlock()

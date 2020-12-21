@@ -3,8 +3,8 @@ package main
 import (
 	_ "net/http/pprof"
 
-	"ws_test/handlers"
-	"ws_test/networking"
+	"latticesphere/handlers"
+	"latticesphere/networking/broadcaster"
 
 	"fmt"
 	"net/http"
@@ -15,7 +15,7 @@ import (
 func main() {
 	//http.HandleFunc("/path", rootHandler)
 
-	b := networking.NewBoradcaster()
+	b := broadcaster.NewBoradcaster()
 
 	http.HandleFunc("/", handlers.RootHandler)
 	http.HandleFunc("/broadcast", b.WSProxy)
