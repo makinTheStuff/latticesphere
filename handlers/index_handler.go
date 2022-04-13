@@ -16,6 +16,8 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
   </head>
   <body>
 	<div id="text"></div>
+	<input type="text" id="text-view" /><br/>
+    <input type="Button" id="send-button" value="Send" ></input>
     <script>
       var ws = new WebSocket("ws://0.0.0.0:8889/ws");
 	  ws.binaryType = 'arraybuffer';
@@ -33,6 +35,16 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 		// var num_open_connns = jsonObject.num_open_connns;
 		// console.log(num_open_connns)
       }
+	  var textView = document.getElementById("text-view");
+	  var buttonSend = document.getElementById("send-button");
+		// Handle the button click event.
+		buttonSend.onclick = function() {
+		 // Send the data if connection is open
+		  if (ws.readyState === WebSocket.OPEN){
+			ws.send(textView.value);
+			textView.value = "";
+		  }
+		}
 	  ws.onclose = function(e){
 		var d = document.createElement("div");
 		d.innerHTML = "CLOSED";
