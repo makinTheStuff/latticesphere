@@ -19,7 +19,7 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 	<input type="text" id="text-view" /><br/>
     <input type="Button" id="send-button" value="Send" ></input>
     <script>
-      var ws = new WebSocket("ws://0.0.0.0:8889/ws");
+      var ws = new WebSocket("ws://" + document.domain + ":8889/ws");
 	  ws.binaryType = 'arraybuffer';
       ws.onmessage = function(e) {
 		var d = document.createElement("div");
